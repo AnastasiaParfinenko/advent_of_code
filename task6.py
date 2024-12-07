@@ -1,19 +1,22 @@
-import copy
-
+import time
 
 class Grid:
-
-    def __init__(self, field, dir):
-        self.field = copy.deepcopy(field)
-        self.dir = dir
+    def __init__(self):
+        self.field = self.get_field()
+        self.dir = 'up'
         self.pos = self.get_pos()
         self.path = set()
+
+    @staticmethod
+    def get_field():
+        with open('input.txt', 'r') as file:
+            return  [list(line.strip('\n')) for line in file]
 
     def get_pos(self):
         for i in range(len(self.field)):
             for j in range(len(self.field)):
                 if self.field[i][j] == '^':
-                    return (i, j)
+                    return i, j
 
     def action(self):
         i = self.pos[0]
@@ -57,50 +60,56 @@ class Grid:
                 self.pos = (i, j - 1)
 
     def mark(self, i, j):
-        self.field[i][j] = 'X'
         self.path.add((self.dir, (i, j)))
 
+    def get_path(self):
+        while not self.action():
+            pass
 
-def get_field():
-    with open('input.txt', 'r') as file:
-        return  [list(line.strip('\n')) for line in file]
-
-
-def part1():
-    grid = Grid(get_field(), 'up')
-    while not grid.action():
-        pass
-
-    # for line in grid.field:
-    #     print(*line)
-
-    print(sum(cell == 'X' for row in grid.field for cell in row))
-
-    return grid.path
+        return self.path
 
 
-def check_cell(grid: Grid, cell):
-    cur_grid = Grid(grid.field, 'up')
-    cur_grid.field[cell[0]][cell[1]] = '#'
+def check_cell(grid: Grid):
     while True:
-        res = cur_grid.action()
+        res = grid.action()
+        # for row in grid.field:
+        #     print(*row)
+        # print()
         if res == "I'm free":
             return False
-        if (cur_grid.dir, cur_grid.pos) in cur_grid.path:
+        if (grid.dir, grid.pos) in grid.path:
             return True
 
 
+def part1():
+    grid = Grid()
+    place_for_x = set(pos for dir, pos in grid.get_path())
+    ans = len(place_for_x)
+
+    print(ans)
+
+
 def part2():
-    grid = Grid(get_field(), 'up')
-    place_for_x = set(pos for dir, pos in part1())
-    place_for_x.discard(('up', grid.pos))
+    pr_start = time.time()
+    grid = Grid()
+    start = grid.pos
+    place_for_x = set(pos for dir, pos in grid.get_path())
+    place_for_x.discard(('up', start))
 
     res = 0
     for cell in place_for_x:
-        if check_cell(grid, cell):
+        grid.pos = start
+        grid.dir = 'up'
+        grid.path = set()
+        grid.field[cell[0]][cell[1]] = '#'
+        if check_cell(grid):
             res += 1
+        grid.field[cell[0]][cell[1]] = '.'
 
     print(res)
+    pr_end = time.time()
+    print(pr_end - pr_start)
 
 
+# part1()
 part2()

@@ -13,6 +13,7 @@ def get_data():
 
     return rules, updates
 
+
 def check(rules, update):
     for i in range(len(update)):
         for rule in rules:
@@ -27,8 +28,7 @@ def part1():
     rules, updates = get_data()
     for update in updates:
         if check(rules, update):
-            m = int(len(update) / 2)
-            res += update[m]
+            res += update[len(update) // 2]
     print(res)
 
 
@@ -54,8 +54,7 @@ def part2():
 
     for update in updates:
         if not check(rules, update):
-            m = int(len(update) / 2)
-            res += change_update(rules, update)[m]
+            res += change_update(rules, update)[len(update) // 2]
 
     print(res)
 
