@@ -1,5 +1,5 @@
 def get_numbers():
-    with open('input.txt', 'r') as file:
+    with open('input7.txt', 'r') as file:
         equations = []
         for line in file:
             equation = [int(num.strip(':')) for num in line.strip('\n').split()]
@@ -8,22 +8,14 @@ def get_numbers():
         return equations
 
 
-def calculate1(eq, i, res, results=None):
-    if results is None:
-        results = []
-
-    if results or res > eq[0]:
-        return
+def calculate1(eq, i, res):
+    if res > eq[0]:
+        return 0
 
     if i > len(eq) - 2:
-        if res == eq[0]:
-            results.append(eq[0])
-        return
+        return eq[0] if res == eq[0] else 0
 
-    calculate1(eq, i + 1, res + eq[i + 1], results)
-    calculate1(eq, i + 1, res * eq[i + 1], results)
-
-    return results
+    return calculate1(eq, i + 1, res + eq[i + 1]) or calculate1(eq, i + 1, res * eq[i + 1])
 
 
 def part1():
@@ -32,29 +24,20 @@ def part1():
     for eq in equations:
         if calculate1(eq, 1, eq[1]):
             # print(eq)
-            ans += int(calculate1(eq, 1, eq[1])[0])
+            ans += calculate1(eq, 1, eq[1])
     print(ans)
 
 
-def calculate2(eq, i, res, results=None):
-    if results is None:
-        results = []
-
-    if results or res > eq[0]:
-        return
+def calculate2(eq, i, res):
+    if res > eq[0]:
+        return 0
 
     if i > len(eq) - 2:
-        if res == eq[0]:
-            results.append(eq[0])
-        return
+        return eq[0] if res == eq[0] else 0
 
-    calculate2(eq, i + 1, res + eq[i + 1], results)
-    calculate2(eq, i + 1, res * eq[i + 1], results)
-
-    n = len(str(eq[i + 1]))
-    calculate2(eq, i + 1, res * 10 ** n + eq[i + 1], results)
-
-    return results
+    return calculate2(eq, i + 1, res + eq[i + 1]) or \
+           calculate2(eq, i + 1, res * eq[i + 1]) or \
+           calculate2(eq, i + 1, int(str(res) + str(eq[i + 1])))
 
 
 def part2():
@@ -63,9 +46,9 @@ def part2():
     for eq in equations:
         if calculate2(eq, 1, eq[1]):
             # print(eq)
-            ans += int(calculate2(eq, 1, eq[1])[0])
+            ans += calculate2(eq, 1, eq[1])
     print(ans)
 
 
-# part1()
+part1()
 part2()
