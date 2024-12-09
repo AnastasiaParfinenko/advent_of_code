@@ -9,7 +9,7 @@ class Grid:
 
     @staticmethod
     def get_field():
-        with open('input.txt', 'r') as file:
+        with open('input6.txt', 'r') as file:
             return  [list(line.strip('\n')) for line in file]
 
     def get_pos(self):

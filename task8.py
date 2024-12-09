@@ -6,16 +6,12 @@ class Grid:
         self.data = {}
 
     def get_data(self):
-        with open('input.txt', 'r') as file:
+        with open('input8.txt', 'r') as file:
             content = file.read().splitlines()
             self.size = len(content)
 
-            i = 0
-            for line in content:
-                i += 1
-                j = 0
-                for c in line:
-                    j += 1
+            for i, line in enumerate(content, start=1):
+                for j, c in enumerate(line, start=1):
                     if c != '.':
                         self.data.setdefault(c, []).append((i, j))
 

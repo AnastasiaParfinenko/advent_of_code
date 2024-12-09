@@ -1,5 +1,5 @@
 def get_data():
-    with open('input.txt', 'r') as file:
+    with open('input5.txt', 'r') as file:
         rules = []
         for line in file:
             if line == '\n':
