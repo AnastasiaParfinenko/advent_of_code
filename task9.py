@@ -1,5 +1,5 @@
 def get_data():
-    with open('input.txt', 'r') as file:
+    with open('input9.txt', 'r') as file:
         very_long_line = file.read().strip('\n')
 
         files = {}

@@ -1,10 +1,6 @@
 def get_table():
-    table = []
-    with open('input.txt', 'r') as file:
-        for line in file:
-            table.append(line.strip())
-
-    return table
+    with open('input4.txt', 'r') as file:
+        return file.read().splitlines()
 
 
 def search(table):
