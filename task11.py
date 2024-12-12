@@ -2,9 +2,8 @@ from functools import lru_cache
 
 
 def get_stones():
-    with open('input.txt', 'r') as file:
-        stones = file.read().split()
-        return stones
+    with open('input11.txt', 'r') as file:
+        return file.read().split()
 
 
 @lru_cache(None)
