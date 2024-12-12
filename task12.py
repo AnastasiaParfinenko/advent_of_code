@@ -1,11 +1,12 @@
 from itertools import product
 
+
 class Area:
     def __init__(self, i, j):
         self.p = 4
         self.s = 1
         self.sides = 4
-        self.cells = [(i, j)]
+        self.cells = {(i, j)}
 
 
 class Grid:
@@ -33,13 +34,13 @@ class Grid:
                     right_area = next((area for area in areas if right_cell in area.cells))
 
                 if up_area == right_area:
-                    up_area.cells.append((i, j))
+                    up_area.cells.add((i, j))
                     up_area.s += 1
                     up_area.p += 0
                     if (i - 1, j + 1) not in up_area.cells:
                         up_area.sides -= 2
                 elif right_area and up_area:
-                    up_area.cells += right_area.cells + [(i ,j)]
+                    up_area.cells |= right_area.cells | {(i ,j)}
                     up_area.s += right_area.s + 1
                     up_area.p += right_area.p
                     up_area.sides += right_area.sides
@@ -47,13 +48,13 @@ class Grid:
                     if (i - 1, j + 1) not in up_area.cells:
                         up_area.sides -= 2
                 elif right_area:
-                    right_area.cells.append((i, j))
+                    right_area.cells.add((i, j))
                     right_area.s += 1
                     right_area.p += 2
                     if (i - 1, j - 1) in right_area.cells:
                         right_area.sides += 2
                 elif up_area:
-                    up_area.cells.append((i, j))
+                    up_area.cells.add((i, j))
                     up_area.s += 1
                     up_area.p += 2
                     if (i - 1, j + 1) in up_area.cells:
