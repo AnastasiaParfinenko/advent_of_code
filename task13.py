@@ -5,7 +5,7 @@ import re
 Point = namedtuple('Point', ('x', 'y'))
 
 
-class Claw_Machine:
+class ClawMachine:
     def __init__(self):
         self.a = None
         self.b = None
@@ -13,10 +13,10 @@ class Claw_Machine:
 
 
 def get_data():
-    with open('input.txt', 'r') as file:
+    with open('input13.txt', 'r') as file:
         machines = []
         while True:
-            machine = Claw_Machine()
+            machine = ClawMachine()
             for attr in ['a', 'b', 'prize']:
                 x, y = map(int, re.findall('\d+', file.readline()))
                 setattr(machine, attr, Point(x, y))
@@ -30,7 +30,7 @@ def det(p1: Point, p2: Point):
     return p1.x * p2.y - p1.y * p2.x
 
 
-def solve_system(m: Claw_Machine):
+def solve_system(m: ClawMachine):
     assert det(m.a, m.b) != 0, 'НУЛЕВОЙ ОПРЕДЕЛИТЕЛЬ!!!'
 
     x = det(m.prize, m.b) // det(m.a, m.b)
