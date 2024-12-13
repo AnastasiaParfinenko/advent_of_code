@@ -1,4 +1,5 @@
 from collections import namedtuple
+import re
 
 
 Point = namedtuple('Point', ('x', 'y'))
@@ -6,17 +7,9 @@ Point = namedtuple('Point', ('x', 'y'))
 
 class Claw_Machine:
     def __init__(self):
-        self.a = Point(-1, -1)
-        self.b = Point(-1, -1)
-        self.prize = Point(-1, -1)
-
-
-def get_coords(file):
-    line = file.readline().split()
-    i = 2 if line[0] == 'Button' else 1
-    x = int(line[i][2:].strip(','))
-    y = int(line[i + 1][2:].strip('\n'))
-    return Point(x, y)
+        self.a = None
+        self.b = None
+        self.prize = None
 
 
 def get_data():
@@ -25,7 +18,8 @@ def get_data():
         while True:
             machine = Claw_Machine()
             for attr in ['a', 'b', 'prize']:
-                setattr(machine, attr, get_coords(file))
+                x, y = map(int, re.findall('\d+', file.readline()))
+                setattr(machine, attr, Point(x, y))
             machines.append(machine)
             if not file.readline():
                 break
@@ -60,7 +54,6 @@ def part2():
         m.prize = Point(m.prize.x + 10 ** 13, m.prize.y + 10 ** 13)
         s = solve_system(m)
         total_price += 3 * s[0] +  s[1]
-
     print(total_price)
 
 
