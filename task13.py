@@ -6,10 +6,9 @@ Point = namedtuple('Point', ('x', 'y'))
 
 
 class ClawMachine:
-    def __init__(self):
-        self.a = None
-        self.b = None
-        self.prize = None
+    a: Point
+    b: Point
+    prize: Point
 
 
 def get_data():
