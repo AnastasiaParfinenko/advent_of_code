@@ -7,9 +7,7 @@ def parse_file_with_findall(file_path):
 
     with open(file_path, 'r') as file:
         for line in file:
-            # Найти все совпадения в строке
             matches = p.findall(line.strip())
-            # Добавить каждый найденный кортеж в список, преобразовав строки в числа
             tuples_list.extend([tuple(map(int, match)) for match in matches])
 
     return tuples_list
@@ -46,8 +44,6 @@ def count_figures_in_quadrants_product(width, height, figures):
         elif x > middle_x and y > middle_y:
             quadrants['Q4'] += 1
 
-    print(quadrants.values())
-
     product = quadrants['Q1'] * quadrants['Q2'] * quadrants['Q3'] * quadrants['Q4']
     return product
 
@@ -55,7 +51,7 @@ def count_figures_in_quadrants_product(width, height, figures):
 def pattern(on_grid):
     for j in range(103):
         for i in range(101):
-            p = set([(i + k, j) for k in range(7)])
+            p = set([(i, j + k) for k in range(10)])
             if p.issubset(on_grid):
                 return True
 
@@ -73,15 +69,9 @@ def print_pic(width, height, figures):
 
 
 def part1():
-    file_path = 'input.txt'
-    tuples = parse_file_with_findall(file_path)
+    file_path = 'input14.txt'
     width = 101
     height = 103
-    # tacts = 100
-    # figures = []
-    # for robot in tuples:
-    #     figures.append(calculate_position_with_wrap(width, height, robot[0], robot[1], robot[2], robot[3], tacts))
-    # print(count_figures_in_quadrants_product(width, height, figures))
     robots = parse_file_with_findall(file_path)
     for _ in range(100):
         robots = [after_one_tact(width, height, robot) for robot in robots]
@@ -89,7 +79,7 @@ def part1():
     print(count_figures_in_quadrants_product(width, height, on_grid))
 
 def part2():
-    file_path = 'input.txt'
+    file_path = 'input14.txt'
     robots = parse_file_with_findall(file_path)
     w = 101
     h = 103
@@ -97,21 +87,8 @@ def part2():
     with open('output.txt', 'w') as file:
         while True:
             tacts += 1
-            # print(tacts)
             robots = [after_one_tact(w, h, robot) for robot in robots]
             on_grid = set([(robot[0], robot[1]) for robot in robots])
-            # if len(on_grid & cristmas_tree3(w, h)) > 350:
-            #     print(len(on_grid & cristmas_tree3(w, h)))
-            #     print(tacts)
-            #     print_pic(w, h, on_grid & cristmas_tree3(w, h))
-            # file.write(str(tacts) + '\n')
-            # for i in range(h):
-            #     for j in range(w):
-            #         if (j, i) in on_grid:
-            #             file.write('@')
-            #         else:
-            #             file.write('.')
-            #     file.write('\n')
             if pattern(on_grid):
                 print(tacts)
                 print_pic(w, h, on_grid)
@@ -119,5 +96,5 @@ def part2():
                 break
 
 
-# print_pic(101, 103, cristmas_tree3(101, 103))
+part1()
 part2()

@@ -97,12 +97,14 @@ class Warehouse:
         n = self.sign(s)
 
         new_ps = [(p[0] + n, p[1]) for p in ps if self.grid[p[0]][p[1]] != '.']
-        if self.grid[new_ps[-1][0]][new_ps[-1][1]] == '[':
-            new_ps += [(new_ps[-1][0], new_ps[-1][1] + 1)]
-        if self.grid[new_ps[0][0]][new_ps[0][1]] == ']':
-            new_ps = [(new_ps[0][0], new_ps[0][1] - 1)] + new_ps
+        add_ps = []
+        for p in new_ps:
+            if self.grid[p[0]][p[1]] == ']' and (p[0], p[1] - 1) not in new_ps:
+                add_ps += [(p[0], p[1] - 1)]
+            if self.grid[p[0]][p[1]] == '[' and (p[0], p[1] + 1) not in new_ps:
+                add_ps += [(p[0], p[1] + 1)]
 
-        return new_ps
+        return new_ps + add_ps
 
     def move_u_or_d(self, s):
         path = [[self.robot]]
@@ -129,8 +131,6 @@ class Warehouse:
 
     def move2(self):
         for s in self.moves:
-            self.visual()
-            print(s)
             if s in ['^', 'v']:
                 self.move_u_or_d(s)
             else:
@@ -138,7 +138,7 @@ class Warehouse:
 
 
 def get_data():
-    with open('input_ex.txt', 'r') as file:
+    with open('input15.txt', 'r') as file:
         house = Warehouse()
         content = file.read().splitlines()
         house.width = len(content[0])
@@ -152,11 +152,11 @@ def get_data():
 def part1():
     house = get_data()
     house.move()
+    house.visual()
     print(house.count_price('O'))
 
 def part2():
     house = get_data()
-    print(house.moves)
     house.grid = house.double_grid()
     house.width = 2 * house.width
     house.robot = house.get_robot()
@@ -165,5 +165,5 @@ def part2():
     print(house.count_price('['))
 
 
-# part1()
+part1()
 part2()
