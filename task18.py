@@ -7,8 +7,11 @@ def get_data(name):
         return [tuple(map(int, line.split(','))) for line in file.read().splitlines()]
 
 
+def is_inside(size, cell):
+    return 0 <= cell[0] < size and 0 <= cell[1] < size
+
+
 def search_path(size, bytes):
-    grid = list(product(range(size), repeat=2))
     directions = ['^', '>', 'v', '<']
     dx = {'^': 0, '>': 1, 'v': 0, '<': -1}
     dy = {'^': -1, '>': 0, 'v': 1, '<': 0}
@@ -31,7 +34,7 @@ def search_path(size, bytes):
 
         for dir in directions:
             next_cell = (x + dx[dir], y + dy[dir])
-            if next_cell not in grid or next_cell in bytes:
+            if not is_inside(size, next_cell) or next_cell in bytes:
                 continue
             if next_cell not in visited or visited[next_cell] > l + 1:
                 heappush(queue, (l + 1, next_cell))
@@ -59,18 +62,18 @@ def part2(size, name):
             up = number_bytes
             continue
 
-        for i in range(number_bytes, number_bytes + 5):
+        for i in range(number_bytes, number_bytes + 1):
             byte = all_bytes[i]
             bytes.append(byte)
-            if not search_path(size, bytes):
+            if not search_path(size, set(bytes)):
                 print(byte)
                 work = False
                 break
         else:
-            down = number_bytes
+            down = number_bytes + 1
 
 
-part1(71, 1024, 'input.txt')
-part2(71, 'input.txt')
+part1(71, 1024, 'input18.txt')
+part2(71, 'input18.txt')
 
 
