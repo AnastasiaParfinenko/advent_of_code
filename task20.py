@@ -1,20 +1,16 @@
+from line_profiler import profile
+
 def get_data():
     with open('input.txt', 'r') as file:
         path_set = set()
-        i = 0
-        for line in file:
-            j = 0
-            for c in line:
-                if c == '#':
-                    pass
-                elif c == '.':
+        for i, line in enumerate(file):
+            for j, c in enumerate(line):
+                if c == '.':
                     path_set.add((i, j))
                 elif c == 'S':
                     start = (i, j)
                 elif c == 'E':
                     end = (i, j)
-                j += 1
-            i += 1
 
         path_set.add(end)
 
@@ -25,7 +21,7 @@ def neighbours(p):
     i, j = p
     return [(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)]
 
-
+@profile
 def get_order(start: tuple, end: tuple, path_set: set):
     cur_p = start
     num = 0
@@ -41,22 +37,29 @@ def get_order(start: tuple, end: tuple, path_set: set):
     return numbered_path
 
 
-def cheat(numbered_path: dict, cheat_paths: list):
+@profile
+def cheat(max_dist, min_save, numbered_path: dict):
+    count = 0
     for p in numbered_path:
-        for p1 in neighbours(p):
-            if p1 not in numbered_path:
-                for p2 in neighbours(p1):
-                    if p2 in numbered_path:
-                        save = numbered_path[p2] - numbered_path[p] - 2
-                        cheat_paths.append(save)
+        for i in range(- max_dist, max_dist + 1):
+            for j in range(- max_dist + abs(i), max_dist + 1 - abs(i)):
+                num_p2 = numbered_path.get((p[0] + i, p[1] + j))
+                if num_p2 and num_p2 - numbered_path[p] - abs(i) - abs(j) >= min_save:
+                    count += 1
+    return count
 
 
-def part12():
+def part1():
     start, end, path_set = get_data()
     numbered_path = get_order(start, end, path_set)
-    cheat_paths = []
-    cheat(numbered_path, cheat_paths)
-    print(sum(1 for el in cheat_paths if el >= 100))
+    print(cheat(2, 100, numbered_path))
 
 
-part12()
+def part2():
+    start, end, path_set = get_data()
+    numbered_path = get_order(start, end, path_set)
+    print(cheat(20, 100, numbered_path))
+
+
+part1()
+part2()
