@@ -56,31 +56,61 @@ class Computer:
         self.c = self.a // 2 ** num
         self.p += 2
 
+    def work(self):
+        while True:
+            if self.p < len(self.opcodes) and self.p + 1 < len(self.opcodes):
+                operand = self.opcodes[self.p + 1]
+                self.commands[self.opcodes[self.p]](operand)
+            else:
+                break
+
+        return self.output
+
 
 def get_nums(line):
     all_nums = re.findall(r'(-?\d+)', line)
     return list(map(int, all_nums))
+
 
 def get_num(line):
     nums = get_nums(line)
     assert len(nums) == 1
     return nums[0]
 
-def part1():
-    with open('input_ex.txt', 'r') as file:
+
+def get_data():
+    with open('input17.txt', 'r') as file:
         content = file.readlines()
         a, b, c = map(get_num, content[0:3])
         opcodes = get_nums(content[4])
 
-    computer = Computer(a, b, c, opcodes)
-    while True:
-        if computer.p < len(opcodes) and computer.p + 1 < len(opcodes):
-            operand = opcodes[computer.p + 1]
-            computer.commands[opcodes[computer.p]](operand)
-        else:
-            break
+    return Computer(a, b, c, opcodes)
 
-    print(f'a: {computer.a}, b: {computer.b}, c: {computer.c}')
-    print(','.join(map(str, computer.output)))
+
+def part1():
+    computer = get_data()
+    print(','.join(map(str, computer.work())))
+
+
+def search_next_a(opcodes, a_base, end):
+    for i in range(8):
+        a = 8 * a_base + i
+        computer = Computer(a, 0, 0, opcodes)
+        if computer.work() == opcodes[-end:]:
+            return a
+
+
+def part2():
+    with open('input17.txt', 'r') as file:
+        content = file.readlines()
+        opcodes = get_nums(content[4])
+
+    a_base = 0
+    for end in range(1, len(opcodes) + 1):
+        a_base = search_next_a(opcodes, a_base, end)
+
+    print(a_base)
+
 
 part1()
+part2()
