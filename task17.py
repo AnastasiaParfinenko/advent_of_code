@@ -93,11 +93,13 @@ def part1():
 
 
 def search_next_a(opcodes, a_base, end):
-    for i in range(8):
+    i = 0
+    while True:
         a = 8 * a_base + i
         computer = Computer(a, 0, 0, opcodes)
         if computer.work() == opcodes[-end:]:
             return a
+        i += 1
 
 
 def part2():
