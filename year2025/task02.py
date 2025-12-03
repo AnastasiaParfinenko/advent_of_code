@@ -7,8 +7,8 @@ def get_data(name):
 def part1():
     ranges = get_data('input02_1.txt')
     res = 0
-    for paar in ranges:
-        for n in range(paar[0], paar[1] + 1):
+    for a, b in ranges:
+        for n in range(a, b + 1):
             str_n = str(n)
             len_n = len(str_n)
             if len_n % 2 == 0 and str_n[:len_n // 2] == str_n[len_n // 2:]:
@@ -19,14 +19,11 @@ def part1():
 def part2():
     ranges = get_data('input02_1.txt')
     res = 0
-    for paar in ranges:
-        for n in range(paar[0], paar[1] + 1):
+    for a, b in ranges:
+        for n in range(a, b + 1):
             str_n = str(n)
-            len_n = len(str_n)
-            for len_seq in range(1, len_n // 2 + 1):
-                if len_n % len_seq == 0 and (len_n // len_seq) * str_n[:len_seq] == str_n:
-                    res += n
-                    break
+            if str_n in (str_n + str_n)[1:-1]:
+                res += n
     print(res)
 
 
