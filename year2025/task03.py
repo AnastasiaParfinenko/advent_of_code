@@ -16,36 +16,36 @@ def part1():
             max_el_2 = max(bank[pos + 1:])
             res += max_el_1 * 10 + max_el_2
 
-    print(res)
+    return res
 
 
 def part2():
     banks = get_data('input03_1.txt')
     batteries_number = 12
     res = 0
-    l = len(banks[-1])
+    l = len(banks[0])
     for bank in banks:
         joltage = 0
-        pos1, pos2 = 0, l
+        pos1 = 0
+        pos2 = l - batteries_number + 1
 
-        count = 0
-        while count < batteries_number:
-            max_el = max(bank[pos1:pos2])
-            pos = bank[pos1:pos2].index(max_el)
-            if pos1 + pos <= l - (batteries_number - count):
-                joltage = joltage * 10 + max_el
-                pos1 += pos + 1
-                pos2 = l
-                count += 1
-            else:
-                pos2 = pos1 + pos
+        for i in range(batteries_number):
+            pos, max_el = max(
+                ((j, bank[j]) for j in range(pos1, pos2 + i)),
+                key=lambda x: x[1]
+            )
+            joltage = joltage * 10 + max_el
+            pos1 = pos + 1
 
         res += joltage
 
-    print(res)
+    return res
 
 
-part1()
-# 17332
-part2()
-# 172516781546707
+a1 = part1()
+print(a1)
+assert a1 == 17332, a1
+
+a2 = part2()
+print(a2)
+assert a2 == 172516781546707, a2
