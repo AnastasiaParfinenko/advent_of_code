@@ -12,6 +12,7 @@ def count_rolls(grid, size, i, j):
                 count += grid[i + k][j + l]
     return count
 
+
 def part1():
     grid = get_data('input04_1.txt')
     size = len(grid)
